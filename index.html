@@ -1,40 +1,97 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  </head>
-   <style>
-     .container {
-     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0);
-    color: black;
-    padding-left: 1px;
-    padding-right: 1px;
-    font-size: 16px;
-}
-     .btn {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid #8b95e7;
-    border-radius: 2px;
-    color: white; /* White text */
-    padding: 10px 20px;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
-    font-size: 16px;
-}
-   </style>
-  
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <title>A-Frame Scene with Audio</title>
+    <script src="https://aframe.io"></script>
+    
+    <style>
+        .container {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0);
+            display: flex; /* Располагаем кнопки в один ряд */
+            gap: 10px;     /* Расстояние между кнопками */
+            z-index: 10;
+        }
+        
+        .btn {
+            background-color: rgba(0, 0, 0, 0.4); /* Чуть темнее для читаемости */
+            border: 1px solid #8b95e7;
+            border-radius: 4px;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            opacity: 0.9;
+            font-size: 16px;
+            white-space: nowrap; /* Защита от переноса текста */
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: rgba(139, 149, 231, 0.6);
+        }
+
+        /* Стиль для активного состояния кнопки музыки */
+        .btn.playing {
+            background-color: rgba(46, 204, 113, 0.6);
+            border-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+
     <a-scene>
-      <a-assets>
-        <audio id="bg-music" src="music.mp3" preload="auto"></audio>
-      </a-assets>
-      <a-sky src="1.jpg"></a-sky>
+        <a-assets>
+            <!-- Добавлен компонент sound для интеграции в аудиосистему A-Frame -->
+            <audio id="bg-music" src="music.mp3" preload="auto" loop="true"></audio>
+        </a-assets>
+
+        <a-sky src="1.jpg"></a-sky>
+        
+        <!-- Невидимая сущность для управления звуком в пространстве A-Frame -->
+        
     </a-scene>
-   <div class="container">
-    <form action="1"><button class="btn">NEXT</button></form></div>
-  </body>
+
+    <div class="container">
+        <!-- Кнопка управления музыкой -->
+        <button id="music-btn" class="btn">🎵 PLAY</button>
+
+        <!-- Кнопка NEXT -->
+        <form action="1" style="margin: 0;">
+            <button type="submit" class="btn">NEXT</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const musicBtn = document.getElementById('music-btn');
+            const audioEntity = document.getElementById('audio-container');
+            let isPlaying = false;
+
+            musicBtn.addEventListener('click', () => {
+                // Разблокировка AudioContext для iOS / Android (политика браузеров)
+                const scene = document.querySelector('a-scene');
+                if (scene && scene.audioListener && scene.audioListener.context.state === 'suspended') {
+                    scene.audioListener.context.resume();
+                }
+
+                // Переключение проигрывания
+                if (!isPlaying) {
+                    audioEntity.components.sound.playSound();
+                    musicBtn.textContent = '⏸️ PAUSE';
+                    musicBtn.classList.add('playing');
+                    isPlaying = true;
+                } else {
+                    audioEntity.components.sound.pauseSound();
+                    musicBtn.textContent = '🎵 PLAY';
+                    musicBtn.classList.remove('playing');
+                    isPlaying = false;
+                }
+            });
+        });
+    </script>
+
+</body>
 </html>
