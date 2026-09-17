@@ -27,19 +27,52 @@
             font-size: 16px;
             margin-bottom: 5px;
         }
+
+        /* Новый стиль для полноэкранного всплывающего окна с фото */
+        .photo-overlay {
+            display: none; /* Изначально скрыто */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный черный фон */
+            z-index: 10000; /* Выше кнопок и 3D-сцены */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer; /* Указатель, что на фото можно кликнуть для закрытия */
+        }
+
+        /* Стиль для самого изображения (адаптируется под любой экран) */
+        .photo-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #8b95e7;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
 
-    <!-- ПОЛНЫЙ ОТКАТ К ВАШЕЙ ВЕРСИИ СЦЕНЫ (Ошибки больше нет, белый экран ушел) -->
+    <!-- ПОЛНЫЙ ОТКАТ К ВАШЕЙ ВЕРСИИ СЦЕНЫ -->
     <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic;">
         <a-sky src="1.jpg"></a-sky>
     </a-scene>
 
+    <!-- Новое полноэкранное окно для просмотра фотографии -->
+    <div id="photoOverlay" class="photo-overlay" onclick="closePhoto()">
+        <!-- Замените 'photo.jpg' на имя вашего файла изображения -->
+        <img src="photo.jpg" alt="Просмотр фото">
+    </div>
+
     <div class="container">
         <!-- Оригинальная форма перехода -->
         <form id="sceneForm" action="1">
-            <!-- Кнопка Музыки (без изменений, как в работавшей версии) -->
+            <!-- Новая кнопка PHOTO, созданная по вашему принципу -->
+            <button type="button" class="btn" onclick="openPhoto()">PHOTO</button>
+
+            <!-- Кнопка Музыки (без изменений) -->
             <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
             
             <!-- Безопасная кнопка NEXT -->
@@ -48,15 +81,23 @@
     </div>
 
     <script>
+        // Функции для управления показом фотографии
+        function openPhoto() {
+            document.getElementById('photoOverlay').style.display = 'flex';
+        }
+
+        function closePhoto() {
+            document.getElementById('photoOverlay').style.display = 'none';
+        }
+
+        // Ваша рабочая функция перехода
         function stopMusicAndGo() {
             var scene = document.querySelector('a-scene');
             
-            // Если звук играет, нативно глушим сам аудио-движок, не трогая теги
             if (scene && scene.components && scene.components.sound) {
                 scene.components.sound.stopSound();
             }
             
-            // Мгновенный переход на другую сцену
             document.getElementById('sceneForm').submit();
         }
     </script>
