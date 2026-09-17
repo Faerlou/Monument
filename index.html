@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Базовые мета-теги, чтобы масштаб на смартфонах не ломался -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    
     <style>
-        /* Ваша оригинальная разметка стилей с исправленным синтаксисом */
         .container {
             position: absolute;
             bottom: 10px;
             left: 10px;
-            background-color: rgba(0, 0, 0, 0);
+            background-color: rgba(0,0,0,0);
             color: black;
             padding-left: 1px;
             padding-right: 1px;
             font-size: 16px;
-            z-index: 9999; /* Выносит кнопки поверх 3D холста */
+            z-index: 9999;
         }
-        
         .btn {
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0,0,0,0.2);
             border: 1px solid #8b95e7;
             border-radius: 2px;
             color: white;
@@ -29,59 +24,27 @@
             width: 100%;
             opacity: 0.9;
             font-size: 16px;
-            margin-bottom: 5px; /* Небольшой отступ, если кнопки встанут друг под другом */
-            display: block;
+            margin-bottom: 5px; /* Чтобы кнопки не слипались по вертикали */
         }
     </style>
 </head>
 <body>
 
-    <!-- ВАША ОРИГИНАЛЬНАЯ СЦЕНА (Внутри только небо и ассет) -->
-    <a-scene>
-        <a-assets>
-            <!-- Оставляем аудио внутри ассетов, как у вас и было -->
-            <audio id="bg-music" src="music.mp3" preload="auto" loop></audio>
-        </a-assets>
-        
+    <!-- Встроенная аудиосистема A-Frame (без внешних JS-скриптов) -->
+    <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic;">
         <a-sky src="1.jpg"></a-sky>
     </a-scene>
 
-    <!-- ВАШ ОРИГИНАЛЬНЫЙ КОНТЕЙНЕР (С добавлением кнопки музыки) -->
+    <!-- Ваша оригинальная структура формы (добавлена только кнопка MUSIC) -->
     <div class="container">
-        
-        <!-- Кнопка Музыки: использует встроенный звук сцены, что не вызывает белый экран -->
-        <button type="button" class="btn" id="play-btn">MUSIC: PLAY</button>
-
-        <!-- Ваша оригинальная кнопка NEXT в неизменном виде -->
         <form action="1">
+            <!-- Кнопка Музыки: отправляет событие 'playMusic' прямо в сцену A-Frame -->
+            <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
+            
+            <!-- Ваша оригинальная кнопка NEXT -->
             <button class="btn">NEXT</button>
         </form>
-        
     </div>
-
-    <!-- Безопасный скрипт: работает через системный микшер телефона по клику -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const btn = document.getElementById('play-btn');
-            const audio = document.getElementById('bg-music');
-
-            btn.addEventListener('click', function () {
-                // Официальный обход блокировки звука на iOS/Android через событие клика
-                const scene = document.querySelector('a-scene');
-                if (scene && scene.audioListener && scene.audioListener.context.state === 'suspended') {
-                    scene.audioListener.context.resume();
-                }
-
-                if (audio.paused) {
-                    audio.play();
-                    btn.textContent = "MUSIC: PAUSE";
-                } else {
-                    audio.pause();
-                    btn.textContent = "MUSIC: PLAY";
-                }
-            });
-        });
-    </script>
 
 </body>
 </html>
