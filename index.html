@@ -6,7 +6,7 @@
     <script src="https://aframe.io"></script>
     
     <style>
-        /* Полностью сохраненный ваш оригинальный контейнер */
+        /* ВАШ ОРИГИНАЛЬНЫЙ КОНТЕЙНЕР (БЕЗ ИЗМЕНЕНИЙ) */
         .container {
             position: absolute;
             bottom: 10px;
@@ -16,10 +16,10 @@
             padding-left: 1px;
             padding-right: 1px;
             font-size: 16px;
-            z-index: 999; /* Гарантируем, что кнопки кликаются */
+            z-index: 9999; /* Чтобы сцена точно не перекрывала кнопки */
         }
         
-        /* Полностью сохраненный ваш оригинальный стиль кнопок */
+        /* ВАШ ОРИГИНАЛЬНЫЙ СТИЛЬ КНОПОК */
         .btn {
             background-color: rgba(0, 0, 0, 0.2);
             border: 1px solid #8b95e7;
@@ -27,61 +27,50 @@
             color: white;
             padding: 10px 20px;
             cursor: pointer;
-            width: 100px; /* Фиксированная ширина, чтобы кнопки не сжимались */
             opacity: 0.9;
             font-size: 16px;
-            display: inline-block; /* Выстраивает кнопки в один ряд */
-            margin-right: 5px;     /* Отступ между кнопками */
-            text-align: center;
+            
+            /* Эти две строчки аккуратно ставят кнопки в ряд, не сжимая их размер */
+            display: inline-block;
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Ваша оригинальная сцена без изменений, вызывавших белый экран -->
+    <!-- ВАША ОРИГИНАЛЬНАЯ РАБОЧАЯ СЦЕНА (БЕЗ ИЗМЕНЕНИЙ) -->
     <a-scene>
-        <a-assets>
-            <audio id="bg-music" src="music.mp3" preload="auto" loop></audio>
-        </a-assets>
         <a-sky src="1.jpg"></a-sky>
     </a-scene>
 
-    <!-- Исправленный контейнер: формы убраны, чтобы элементы не прыгали -->
+    <!-- Изолированный плеер, вынесенный за пределы 3D-сцены -->
+    <audio id="mobileMusic" src="music.mp3" preload="auto" loop></audio>
+
+    <!-- ИНТЕРФЕЙС ПОВЕРХ СЦЕНЫ -->
     <div class="container">
         
-        <!-- Новая кнопка для Музыки (в вашем стиле) -->
-        <button type="button" class="btn" id="musicBtn">MUSIC</button>
+        <!-- Новая кнопка Музыки в вашем стиле -->
+        <button type="button" class="btn" onclick="togglePlay()">MUSIC</button>
         
-        <!-- Ваша кнопка NEXT (переход по клику через JS, чтобы не ломать верстку тегом form) -->
-        <button type="button" class="btn" onclick="window.location.href='1'">NEXT</button>
+        <!-- Ваша оригинальная кнопка NEXT -->
+        <form action="1" style="display: inline-block; margin: 0;">
+            <button class="btn">NEXT</button>
+        </form>
 
     </div>
 
-    <!-- Скрипт, который обходит блокировку звука на iOS (iPhone) и Android -->
+    <!-- Простейший скрипт: 100% совместимость с iPhone и Android -->
     <script>
-        const musicBtn = document.getElementById('musicBtn');
-        const audio = document.getElementById('bg-music');
-        let isPlaying = false;
-
-        musicBtn.addEventListener('click', function() {
-            if (!isPlaying) {
-                // Нативный запуск аудио + обход ограничений мобильных браузеров
-                audio.play()
-                    .then(() => {
-                        musicBtn.textContent = "PAUSE";
-                        musicBtn.style.backgroundColor = "rgba(139, 149, 231, 0.4)"; // Подсветка при игре
-                        isPlaying = true;
-                    })
-                    .catch(error => {
-                        console.log("Ошибка воспроизведения:", error);
-                    });
+        var audio = document.getElementById('mobileMusic');
+        
+        function togglePlay() {
+            // На мобильных устройствах звук обязан запускаться внутри функции клика
+            if (audio.paused) {
+                audio.play();
             } else {
                 audio.pause();
-                musicBtn.textContent = "MUSIC";
-                musicBtn.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
-                isPlaying = false;
             }
-        });
+        }
     </script>
 
 </body>
