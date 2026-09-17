@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://aframe.io"></script>
     <style>
         .container {
             position: absolute;
@@ -24,27 +24,47 @@
             width: 100%;
             opacity: 0.9;
             font-size: 16px;
-            margin-bottom: 5px; /* Чтобы кнопки не слипались по вертикали */
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Встроенная аудиосистема A-Frame (без внешних JS-скриптов) -->
-    <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic;">
+    <!-- Добавлено событие stopMusic для принудительной остановки звука -->
+    <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic; off: stopMusic;">
         <a-sky src="1.jpg"></a-sky>
     </a-scene>
 
-    <!-- Ваша оригинальная структура формы (добавлена только кнопка MUSIC) -->
     <div class="container">
-        <form action="1">
-            <!-- Кнопка Музыки: отправляет событие 'playMusic' прямо в сцену A-Frame -->
+        <!-- Оригинальная форма перехода -->
+        <form id="sceneForm" action="1">
+            <!-- Кнопка Музыки (без изменений) -->
             <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
             
-            <!-- Ваша оригинальная кнопка NEXT -->
-            <button class="btn">NEXT</button>
+            <!-- Исправленная кнопка NEXT с вызовом функции остановки -->
+            <button type="button" class="btn" onclick="handleNextScene()">NEXT</button>
         </form>
     </div>
+
+    <script>
+        function handleNextScene() {
+            const scene = document.querySelector('a-scene');
+            
+            if (scene && scene.components && scene.components.sound) {
+                // Отправляем событие 'stopMusic' (останавливает аудио внутри A-Frame)
+                scene.emit('stopMusic');
+                
+                // Дополнительно принудительно выключаем звук через аудио-движок
+                scene.components.sound.stopSound();
+            }
+
+            // Небольшая микро-задержка (50 миллисекунд), чтобы телефон успел применить команду 
+            // и плавно перенаправил пользователя на страницу "1" без хрипов звука
+            setTimeout(() => {
+                document.getElementById('sceneForm').submit();
+            }, 50);
+        }
+    </script>
 
 </body>
 </html>
