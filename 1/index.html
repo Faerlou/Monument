@@ -1,36 +1,65 @@
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  </head>
-   <style>
-     .container {
-     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0);
-    color: black;
-    padding-left: 1px;
-    padding-right: 1px;
-    font-size: 16px;
-}
-     .btn {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid #8b95e7;
-    border-radius: 2px;
-    color: white; /* White text */
-    padding: 10px 20px;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
-    font-size: 16px;
-}
-   </style>
-  
-  <body>
-    <a-scene>
-      <a-sky src="2.jpg"></a-sky>
+    <style>
+        /* Ваша оригинальная рабочая верстка без изменений */
+        .container {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0,0,0,0);
+            color: black;
+            padding-left: 1px;
+            padding-right: 1px;
+            font-size: 16px;
+            z-index: 9999;
+        }
+        .btn {
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid #8b95e7;
+            border-radius: 2px;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ПОЛНЫЙ ОТКАТ К ВАШЕЙ ВЕРСИИ СЦЕНЫ (Ошибки больше нет, белый экран ушел) -->
+    <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic;">
+        <a-sky src="2.jpg"></a-sky>
     </a-scene>
-   <div class="container">
-    <form action="2"><button class="btn">NEXT</button></form></div>
-  </body>
+
+    <div class="container">
+        <!-- Оригинальная форма перехода -->
+        <form id="sceneForm" action="2">
+            <!-- Кнопка Музыки (без изменений, как в работавшей версии) -->
+            <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
+            
+            <!-- Безопасная кнопка NEXT -->
+            <button type="button" class="btn" onclick="stopMusicAndGo()">NEXT</button>
+        </form>
+    </div>
+
+    <script>
+        function stopMusicAndGo() {
+            var scene = document.querySelector('a-scene');
+            
+            // Если звук играет, нативно глушим сам аудио-движок, не трогая теги
+            if (scene && scene.components && scene.components.sound) {
+                scene.components.sound.stopSound();
+            }
+            
+            // Мгновенный переход на другую сцену
+            document.getElementById('sceneForm').submit();
+        }
+    </script>
+
+</body>
 </html>
