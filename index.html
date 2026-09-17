@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <meta charset="UTF-8">
+    <script src="https://aframe.io"></script>
     <style>
-        /* Ваша оригинальная рабочая верстка без изменений */
         .container {
             position: absolute;
             bottom: 10px;
@@ -31,38 +31,61 @@
 </head>
 <body>
 
-    <!-- ПОЛНЫЙ ОТКАТ К ВАШЕЙ ВЕРСИИ СЦЕНЫ (Ошибки больше нет, белый экран ушел) -->
-    <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic;">
+    <!-- Чистая сцена A-Frame, которая больше никогда не слетит при зацикливании -->
+    <a-scene>
         <a-sky src="1.jpg"></a-sky>
     </a-scene>
 
+    <!-- Изолированный нативный HTML5 звук, который мы контролируем на 100% -->
+    <audio id="bg-audio" src="music.mp3" preload="auto" loop></audio>
+
     <div class="container">
-        <!-- Оригинальная форма перехода -->
         <form id="sceneForm" action="1">
-            <!-- Кнопка Музыки (без изменений, как в работавшей версии) -->
-            <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
+            <!-- Кнопка Музыки теперь умеет И включать, И выключать (PLAY/PAUSE) -->
+            <button type="button" class="btn" id="musicBtn" onclick="toggleMusic()">MUSIC: OFF</button>
             
-            <!-- Безопасная кнопка NEXT -->
-            <button type="button" class="btn" onclick="stopMusicAndGo()">NEXT</button>
+            <!-- Кнопка NEXT с гарантированной очисткой звука -->
+            <button type="button" class="btn" onclick="nextScene()">NEXT</button>
         </form>
     </div>
 
     <script>
-        function stopMusicAndGo() {
-            var scene = document.querySelector('a-scene');
-            
-            // Если звук играет, нативно глушим сам аудио-движок, не трогая теги
-            if (scene && scene.components && scene.components.sound) {
-                scene.components.sound.stopSound();
+        const audio = document.getElementById('bg-audio');
+        const musicBtn = document.getElementById('musicBtn');
+
+        // Функция ВКЛЮЧЕНИЯ / ВЫКЛЮЧЕНИЯ музыки на одной сцене
+        function toggleMusic() {
+            // Обход блокировки звука на iOS/Android
+            const scene = document.querySelector('a-scene');
+            if (scene && scene.audioListener && scene.audioListener.context.state === 'suspended') {
+                scene.audioListener.context.resume();
             }
+
+            if (audio.paused) {
+                audio.play();
+                musicBtn.textContent = "MUSIC: ON";
+                musicBtn.style.backgroundColor = "rgba(139, 149, 231, 0.4)"; // визуальный отклик
+            } else {
+                audio.pause();
+                musicBtn.textContent = "MUSIC: OFF";
+                musicBtn.style.backgroundColor = "rgba(0,0,0,0.2)";
+            }
+        }
+
+        // Функция безопасного перехода на следующую сцену
+        function nextScene() {
+            // 1. Полностью останавливаем музыку
+            audio.pause();
+            audio.currentTime = 0; // Сбрасываем дорожку в начало
             
-            // Мгновенный переход на другую сцену
+            // 2. Убиваем объект аудио в памяти браузера, чтобы при быстром клике треки не накладывались
+            audio.src = ""; 
+            audio.load(); 
+
+            // 3. Мгновенно отправляем форму
             document.getElementById('sceneForm').submit();
         }
     </script>
-
-</body>
-</html>
 
 </body>
 </html>
