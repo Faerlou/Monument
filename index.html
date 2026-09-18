@@ -12,7 +12,7 @@
             color: black;
             padding-left: 1px;
             padding-right: 1px;
-            font-size: 16px;
+            font-size: 12px;
             z-index: 9999;
         }
         .btn {
@@ -24,7 +24,7 @@
             cursor: pointer;
             width: 100%;
             opacity: 0.9;
-            font-size: 16px;
+            font-size: 12px;
             margin-bottom: 5px;
         }
 
@@ -66,21 +66,24 @@
     </a-scene>
 
     <!-- Полноэкранное окно для просмотра фотографии -->
-    <div id="photoOverlay" class="photo-overlay" onclick="closePhoto()">
-        
+    <div id="photoOverlay1" class="photo-overlay" onclick="closePhoto()">      
         <!-- ЗАМЕНИТЕ 'photo.jpg' на имя вашего файла изображения или назовите так ваш файл -->
-        <img src="photo.jpg" alt="Просмотр фото">
-        <img src="photo2.jpg" alt="Просмотр фото">
+        <img src="photo.jpg" alt="Просмотр фото1">
     </div>
 
+    <div id="photoOverlay2" class="photo-overlay" onclick="closePhoto()">      
+        <!-- ЗАМЕНИТЕ 'photo2.jpg' на имя вашего файла изображения или назовите так ваш файл -->
+        <img src="photo2.jpg" alt="Просмотр фото2">
+    </div>
+    
     <div class="container">
         <!-- Форма перехода в новую сцену, ЗАМЕНИТЕ номер папки куда переходим (меняем значение "1" на новое значение).
         Для возврата на первую сцену вместо <form id="sceneForm" action="1"> введите <form action="сгенерированная_ссалка_первой_страницы"> -->
         <form id="sceneForm" action="1"> 
             
             <!-- Кнопка PHOTO, вызывает фотографию -->
-            <button type="button" class="btn" onclick="openPhoto(photo)">PHOTO</button>
-            <button type="button" class="btn" onclick="openPhoto(photo2)">PHOTO2</button>
+            <button type="button" class="btn" onclick="openPhoto('photoOverlay1')">PHOTO</button>
+            <button type="button" class="btn" onclick="openPhoto('photoOverlay1')">PHOTO2</button>
 
             <!-- Кнопка MUSIC, включает музыку -->
             <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
