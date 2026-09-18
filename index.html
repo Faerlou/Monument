@@ -82,8 +82,10 @@
         <form id="sceneForm" action="1"> 
             
             <!-- Кнопка PHOTO, вызывает фотографию. Присваиваем значения в соответствии с фото 'photoOverlay1' -->
-            <button type="button" class="btn" onclick="openPhoto('photoOverlay1')">PHOTO1</button>
-            <button type="button" class="btn" onclick="openPhoto('photoOverlay2')">PHOTO2</button>
+            <button type="button" class="btn" onclick="openPhoto('photoOverlay1')">PHOTO 1</button>
+
+            <!-- Новая кнопка для второго фото -->
+            <button type="button" class="btn" onclick="openPhoto('photoOverlay2')">PHOTO 2</button>
 
             <!-- Кнопка MUSIC, включает музыку -->
             <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
@@ -94,7 +96,7 @@
     </div>
 
     <script>
-        // Функции для управления показом фотографии
+       // Универсальные функции управления, принимающие ID нужного окна
         function openPhoto(id) {
             document.getElementById(id).style.display = 'flex';
         }
@@ -102,7 +104,7 @@
         function closePhoto(id) {
             document.getElementById(id).style.display = 'none';
         }
-
+        
         // Функция перехода
         function stopMusicAndGo() {
             var scene = document.querySelector('a-scene');
