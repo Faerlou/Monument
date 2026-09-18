@@ -95,12 +95,12 @@
 
     <script>
         // Функции для управления показом фотографии
-        function openPhoto() {
-            document.getElementById('photoOverlay').style.display = 'flex';
+        function openPhoto(id) {
+            document.getElementById(id).style.display = 'flex';
         }
 
-        function closePhoto() {
-            document.getElementById('photoOverlay').style.display = 'none';
+        function closePhoto(id) {
+            document.getElementById(id).style.display = 'none';
         }
 
         // Функция перехода
