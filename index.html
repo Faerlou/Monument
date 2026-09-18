@@ -70,6 +70,7 @@
         
         <!-- ЗАМЕНИТЕ 'photo.jpg' на имя вашего файла изображения или назовите так ваш файл -->
         <img src="photo.jpg" alt="Просмотр фото">
+        <img src="photo2.jpg" alt="Просмотр фото">
     </div>
 
     <div class="container">
@@ -77,10 +78,11 @@
         Для возврата на первую сцену вместо <form id="sceneForm" action="1"> введите <form action="сгенерированная_ссалка_первой_страницы"> -->
         <form id="sceneForm" action="1"> 
             
-            <!-- Новая кнопка PHOTO, вызывает фотографию -->
+            <!-- Кнопка PHOTO, вызывает фотографию -->
             <button type="button" class="btn" onclick="openPhoto()">PHOTO</button>
+            <button type="button" class="btn" onclick="openPhoto()">PHOTO2</button>
 
-            <!-- Кнопка Музыки, включает музыку -->
+            <!-- Кнопка MUSIC, включает музыку -->
             <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
             
             <!-- Безопасная кнопка NEXT, переключает на новую сцену -->
