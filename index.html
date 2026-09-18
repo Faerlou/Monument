@@ -3,7 +3,7 @@
 <head>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <style>
-        /* Ваша оригинальная рабочая верстка без изменений */
+        /* Рабочая верстка (стиль кнопок) */
         .container {
             position: absolute;
             bottom: 10px;
@@ -28,7 +28,7 @@
             margin-bottom: 5px;
         }
 
-        /* Новый стиль для полноэкранного всплывающего окна с фото */
+        /* Стиль для полноэкранного всплывающего окна с фото */
         .photo-overlay {
             display: none; /* Изначально скрыто */
             position: fixed;
@@ -53,29 +53,36 @@
         }
     </style>
 </head>
+    
 <body>
 
-    <!-- ПОЛНЫЙ ОТКАТ К ВАШЕЙ ВЕРСИИ СЦЕНЫ -->
+    <!-- 3D СЦЕНА -->
+
+    <!-- Замените 'music.mp3' на имя вашего файла звука или назовите так ваш файл -->
     <a-scene sound="src: url(music.mp3); autoplay: false; loop: true; on: playMusic;">
+        
+        <!-- Замените '1.jpg' на имя вашего файла новой понарамы или назовите так ваш файл -->
         <a-sky src="1.jpg"></a-sky>
     </a-scene>
 
-    <!-- Новое полноэкранное окно для просмотра фотографии -->
+    <!-- Полноэкранное окно для просмотра фотографии -->
     <div id="photoOverlay" class="photo-overlay" onclick="closePhoto()">
-        <!-- Замените 'photo.jpg' на имя вашего файла изображения -->
+        
+        <!-- Замените 'photo.jpg' на имя вашего файла изображения или назовите так ваш файл -->
         <img src="photo.jpg" alt="Просмотр фото">
     </div>
 
     <div class="container">
-        <!-- Оригинальная форма перехода -->
-        <form id="sceneForm" action="1">
-            <!-- Новая кнопка PHOTO, созданная по вашему принципу -->
+        <!-- Форма перехода в новую сцену, укажите номер папки куда переходим (меняем значение "1" на новое значение) -->
+        <form id="sceneForm" action="1"> 
+            
+            <!-- Новая кнопка PHOTO, вызывает фотографию -->
             <button type="button" class="btn" onclick="openPhoto()">PHOTO</button>
 
-            <!-- Кнопка Музыки (без изменений) -->
+            <!-- Кнопка Музыки, включает музыку -->
             <button type="button" class="btn" onclick="document.querySelector('a-scene').emit('playMusic')">MUSIC</button>
             
-            <!-- Безопасная кнопка NEXT -->
+            <!-- Безопасная кнопка NEXT, переключает на новую сцену -->
             <button type="button" class="btn" onclick="stopMusicAndGo()">NEXT</button>
         </form>
     </div>
@@ -90,7 +97,7 @@
             document.getElementById('photoOverlay').style.display = 'none';
         }
 
-        // Ваша рабочая функция перехода
+        // Функция перехода
         function stopMusicAndGo() {
             var scene = document.querySelector('a-scene');
             
